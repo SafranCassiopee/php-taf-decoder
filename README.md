@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/SagemCassiopee/php-taf-decoder.svg?branch=master)](https://travis-ci.org/SagemCassiopee/php-taf-decoder)
+[![Coverage Status](https://coveralls.io/repos/github/SagemCassiopee/php-taf-decoder/badge.svg?branch=master)](https://coveralls.io/github/SagemCassiopee/php-taf-decoder?branch=master)
+
 PHP TAF decoder
 =================
 
