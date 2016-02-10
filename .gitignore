@@ -1,0 +1,14 @@
+# IDEs
+.idea
+
+/vendor/
+/report/
+composer.phar
+composer.lock
+
+# Mac OS
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+._*
