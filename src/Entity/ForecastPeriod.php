@@ -23,12 +23,11 @@ class ForecastPeriod
     public function isValid()
     {
         // check that attribute aren't null
-        switch (true) {
-            case $this->getFromDay() === null:
-            case $this->getFromHour() === null:
-            case $this->getToDay() === null:
-            case $this->getToHour() === null:
-                return false;
+        if (
+            $this->getFromDay() == null || $this->getFromHour() == null ||
+            $this->getToDay() == null || $this->getToHour() == null
+        ) {
+            return false;
         }
 
         // check ranges
@@ -46,7 +45,7 @@ class ForecastPeriod
         if ($this->getFromDay() > $this->getToDay()) {
             return false;
         }
-        if ($this->getFromDay() == $this->getToDay() && $this->getFromHour() > $this->getToHour()) {
+        if ($this->getFromDay() == $this->getToDay() && $this->getFromHour() >= $this->getToHour()) {
             return false;
         }
 

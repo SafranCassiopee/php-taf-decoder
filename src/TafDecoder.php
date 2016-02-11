@@ -8,6 +8,7 @@ use TafDecoder\ChunkDecoder\ReportTypeChunkDecoder;
 use TafDecoder\ChunkDecoder\IcaoChunkDecoder;
 use TafDecoder\ChunkDecoder\DatetimeChunkDecoder;
 use TafDecoder\ChunkDecoder\ForecastPeriodChunkDecoder;
+use TafDecoder\ChunkDecoder\SurfaceWindChunkDecoder;
 
 class TafDecoder
 {
@@ -24,6 +25,7 @@ class TafDecoder
             new IcaoChunkDecoder(),
             new DatetimeChunkDecoder(),
             new ForecastPeriodChunkDecoder(),
+            new SurfaceWindChunkDecoder(),
         );
     }
 
@@ -109,17 +111,10 @@ class TafDecoder
                 $remaining_taf = $cde->getRemainingTaf();
             }
 
-            // hook for report status decoder, abort if nil, but decoded taf is valid 
-            if ($chunk_decoder instanceof ReportStatusChunkDecoder) {
-                if ($decoded_taf->getStatus() == 'NIL') {
-                    break;
-                }
-            }
-
             // hook for CAVOK decoder, keep CAVOK information in memory
-            if ($chunk_decoder instanceof VisibilityChunkDecoder) {
-                $with_cavok = $decoded_taf->getCavok();
-            }
+//            if ($chunk_decoder instanceof VisibilityChunkDecoder) {
+//                $with_cavok = $decoded_taf->getCavok();
+//            }
         }
 
         return $decoded_taf;

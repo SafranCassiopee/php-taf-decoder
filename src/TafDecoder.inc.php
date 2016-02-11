@@ -14,6 +14,7 @@ $to_include = array(
     'Entity/DecodedTaf.php',
     'Entity/ForecastPeriod.php',
     'Entity/Value.php',
+    'Entity/SurfaceWind.php',
 
     'Exception/ChunkDecoderException.php',
 
@@ -23,6 +24,7 @@ $to_include = array(
     'ChunkDecoder/IcaoChunkDecoder.php',
     'ChunkDecoder/DatetimeChunkDecoder.php',
     'ChunkDecoder/ForecastPeriodChunkDecoder.php',
+    'ChunkDecoder/SurfaceWindChunkDecoder.php',
 );
 
 foreach ($to_include as $file) {
