@@ -95,9 +95,9 @@ $d = $decoder->parse($raw_taf);
                 <div class="alert alert-info">
                 Need inspiration ? What about:
                 <ul>
-                    <li><a href="./index.php?taf=TAF+TAF+LIRU+032244Z+0318%2F0406+CNL">TAF TAF LIRU 03224Z 0318/0406 CNL</a></li>
+                    <li><a href="./index.php?taf=TAF+TAF+LIRU+032244Z+0318%2F0406+26026G42KT+CNL">TAF TAF LIRU 032244Z 0318/0406 26026G42KT CNL</a></li>
                     <li><a href="./index.php?taf=TAF++++++++AMD+LFBO+080527Z+0806%2F0912+19007KT+CAVOK++++++++BECMG+0810%2F0812+27010KT++++++++BECMG+0818%2F0820+VRB03KT++++++++BECMG+0900%2F0902+16008KT++++++++TEMPO+0903%2F0909+4000+-RA+BKN025">TAF <br>&nbsp;&nbsp;&nbsp;&nbsp;AMD LFBO 080527Z 0806/0912 19007KT CAVOK <br>&nbsp;&nbsp;&nbsp;&nbsp;BECMG 0810/0812 27010KT <br>&nbsp;&nbsp;&nbsp;&nbsp;BECMG 0818/0820 VRB03KT <br>&nbsp;&nbsp;&nbsp;&nbsp;BECMG 0900/0902 16008KT</a></li>
-                    <li><a href="./index.php?taf=TAF+TAF+LIR+032244Z+0318%2F0206+CNL">TAF LIR 032244Z 0318/0206 CNL</a> <- this one has errors on purpose!</li>
+                    <li><a href="./index.php?taf=TAF+TAF+LIRU+032244Z+0318%2F0206+CNL">TAF LIRU 032244Z 0318/0206 CNL</a> &lt;- this one has errors on purpose!</li>
                 </ul>
                 </div>
             <?php } ?>

@@ -25,6 +25,9 @@ class DecodedTaf
     // forecast period
     private $forecast_period;
 
+    // surface wind
+    private $surface_wind;
+
 
     public function __construct($raw_taf)
     {
@@ -131,5 +134,17 @@ class DecodedTaf
     public function getForecastPeriod()
     {
         return $this->forecast_period;
+    }
+
+    public function setSurfaceWind($surface_wind)
+    {
+        $this->surface_wind = $surface_wind;
+
+        return $this;
+    }
+
+    public function getSurfaceWind()
+    {
+        return $this->surface_wind;
     }
 }
