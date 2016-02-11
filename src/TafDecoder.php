@@ -3,9 +3,11 @@
 namespace TafDecoder;
 
 use TafDecoder\Entity\DecodedTaf;
+use TafDecoder\Exception\ChunkDecoderException;
 use TafDecoder\ChunkDecoder\ReportTypeChunkDecoder;
 use TafDecoder\ChunkDecoder\IcaoChunkDecoder;
-use TafDecoder\Exception\ChunkDecoderException;
+use TafDecoder\ChunkDecoder\DatetimeChunkDecoder;
+use TafDecoder\ChunkDecoder\ForecastPeriodChunkDecoder;
 
 class TafDecoder
 {
@@ -20,6 +22,8 @@ class TafDecoder
         $this->decoder_chain = array(
             new ReportTypeChunkDecoder(),
             new IcaoChunkDecoder(),
+            new DatetimeChunkDecoder(),
+            new ForecastPeriodChunkDecoder(),
         );
     }
 
@@ -65,12 +69,10 @@ class TafDecoder
      */
     private function parseWithMode($raw_taf, $strict)
     {
-        // prepare decoding inputs/outputs: (trim, remove linefeeds and returns,
-        // remove first line date, no more than one space)
+        // prepare decoding inputs/outputs: (trim, remove linefeeds and returns, no more than one space)
         $clean_taf = trim($raw_taf);
         $clean_taf = preg_replace("#\n+#", ' ', $clean_taf);
         $clean_taf = preg_replace("#\r+#", ' ', $clean_taf);
-        $clean_taf = preg_replace('#^\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2}\s*#s', '', $clean_taf);
         $clean_taf = preg_replace('#[ ]{2,}#', ' ', $clean_taf) . ' ';
         $clean_taf = strtoupper($clean_taf);
         $remaining_taf = $clean_taf;

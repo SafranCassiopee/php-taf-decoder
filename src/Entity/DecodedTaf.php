@@ -22,18 +22,9 @@ class DecodedTaf
     // time of origin, as string
     private $time;
 
-	// starting day of forecast period
-	private $from_day;
-	
-	// starting time of forecast period, as string
-	private $from_time;
-	
-	// ending day of forecast period
-	private $to_day;
-	
-	// ending time of forecast period, as string
-	private $to_time;
-	
+    // forecast period
+    private $forecast_period;
+
 
     public function __construct($raw_taf)
     {
@@ -53,7 +44,7 @@ class DecodedTaf
     }
 
     /**
-     * Add an exception that occured during taf decoding
+     * Add an exception that occurred during taf decoding
      */
     public function addDecodingException($exception)
     {
@@ -130,4 +121,15 @@ class DecodedTaf
         return $this->time;
     }
 
+    public function setForecastPeriod($forecast_period)
+    {
+        $this->forecast_period = $forecast_period;
+
+        return $this;
+    }
+
+    public function getForecastPeriod()
+    {
+        return $this->forecast_period;
+    }
 }
