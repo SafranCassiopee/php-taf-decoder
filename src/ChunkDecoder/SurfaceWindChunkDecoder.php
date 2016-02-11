@@ -56,8 +56,6 @@ class SurfaceWindChunkDecoder extends TafChunkDecoder implements TafChunkDecoder
             case "MPS":
                 $speed_unit = Value::METER_PER_SECOND;
                 break;
-            default:
-                $speed_unit = '?';
         }
 
         // retrieve and validate found params

@@ -4,6 +4,8 @@ namespace TafDecoder\Test;
 
 use TafDecoder\TafDecoder;
 use TafDecoder\Entity\ForecastPeriod;
+use TafDecoder\Entity\SurfaceWind;
+use TafDecoder\Entity\Value;
 
 class TafDecoderTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,6 +41,15 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(18, $fp->getFromHour());
         $this->assertEquals(4, $fp->getToDay());
         $this->assertEquals(6, $fp->getToHour());
+        /** @var SurfaceWind $sw */
+        $sw = $d->getSurfaceWind();
+        $this->assertFalse($sw->withVariableDirection());
+        $this->assertEquals(230, $sw->getMeanDirection()->getValue());
+        $this->assertEquals('deg', $sw->getMeanDirection()->getUnit());
+        $this->assertNull($sw->getDirectionVariations());
+        $this->assertEquals(10, $sw->getMeanSpeed()->getValue());
+        $this->assertEquals('kt', $sw->getMeanSpeed()->getUnit());
+        $this->assertNull($sw->getSpeedVariations());
 
     }
 
@@ -91,6 +102,8 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
             $first_error = $errors[0];
             $this->assertEquals($taf_error[1], $first_error->getChunkDecoder());
             $this->assertEquals($taf_error[2], $first_error->getChunk());
+            $d->resetDecodingExceptions();
+            $this->assertEmpty($d->getDecodingExceptions());
         }
     }
 }

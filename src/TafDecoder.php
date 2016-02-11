@@ -112,9 +112,9 @@ class TafDecoder
             }
 
             // hook for CAVOK decoder, keep CAVOK information in memory
-            if ($chunk_decoder instanceof VisibilityChunkDecoder) {
-                $with_cavok = $decoded_taf->getCavok();
-            }
+//            if ($chunk_decoder instanceof VisibilityChunkDecoder) {
+//                $with_cavok = $decoded_taf->getCavok();
+//            }
         }
 
         return $decoded_taf;
