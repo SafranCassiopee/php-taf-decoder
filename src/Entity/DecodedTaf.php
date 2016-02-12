@@ -28,6 +28,10 @@ class DecodedTaf
     // surface wind
     private $surface_wind;
 
+    // visibility information
+    private $visibility;
+    private $cavok;
+
 
     public function __construct($raw_taf)
     {
@@ -147,4 +151,29 @@ class DecodedTaf
     {
         return $this->surface_wind;
     }
+
+    public function setVisibility(Visibility $visibility)
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    public function setCavok($cavok)
+    {
+        $this->cavok = $cavok;
+
+        return;
+    }
+
+    public function getCavok()
+    {
+        return $this->cavok;
+    }
+
 }
