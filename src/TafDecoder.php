@@ -9,6 +9,7 @@ use TafDecoder\ChunkDecoder\IcaoChunkDecoder;
 use TafDecoder\ChunkDecoder\DatetimeChunkDecoder;
 use TafDecoder\ChunkDecoder\ForecastPeriodChunkDecoder;
 use TafDecoder\ChunkDecoder\SurfaceWindChunkDecoder;
+use TafDecoder\ChunkDecoder\VisibilityChunkDecoder;
 
 class TafDecoder
 {
@@ -26,6 +27,7 @@ class TafDecoder
             new DatetimeChunkDecoder(),
             new ForecastPeriodChunkDecoder(),
             new SurfaceWindChunkDecoder(),
+            new VisibilityChunkDecoder(),
         );
     }
 
@@ -111,10 +113,10 @@ class TafDecoder
                 $remaining_taf = $cde->getRemainingTaf();
             }
 
-            // hook for CAVOK decoder, keep CAVOK information in memory
-//            if ($chunk_decoder instanceof VisibilityChunkDecoder) {
-//                $with_cavok = $decoded_taf->getCavok();
-//            }
+             // hook for CAVOK decoder, keep CAVOK information in memory
+            if ($chunk_decoder instanceof VisibilityChunkDecoder) {
+                $with_cavok = $decoded_taf->getCavok();
+            }
         }
 
         return $decoded_taf;
