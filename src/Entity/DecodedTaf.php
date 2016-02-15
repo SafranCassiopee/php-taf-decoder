@@ -32,6 +32,8 @@ class DecodedTaf
     private $visibility;
     private $cavok;
 
+    // weather phenomenons
+    private $weather;
 
     public function __construct($raw_taf)
     {
@@ -176,4 +178,17 @@ class DecodedTaf
         return $this->cavok;
     }
 
+    public function setWeather($weather)
+    {
+        $this->weather = $weather;
+
+        return $this;
+    }
+
+    public function getWeather()
+    {
+        return $this->weather;
+    }
 }
+
+

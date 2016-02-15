@@ -2,6 +2,7 @@
 
 namespace TafDecoder;
 
+use TafDecoder\ChunkDecoder\WeatherChunkDecoder;
 use TafDecoder\Entity\DecodedTaf;
 use TafDecoder\Exception\ChunkDecoderException;
 use TafDecoder\ChunkDecoder\ReportTypeChunkDecoder;
@@ -28,6 +29,7 @@ class TafDecoder
             new ForecastPeriodChunkDecoder(),
             new SurfaceWindChunkDecoder(),
             new VisibilityChunkDecoder(),
+            new WeatherChunkDecoder(),
         );
     }
 
