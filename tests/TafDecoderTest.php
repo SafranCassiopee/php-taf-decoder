@@ -7,6 +7,7 @@ use TafDecoder\Entity\Value;
 use TafDecoder\Entity\ForecastPeriod;
 use TafDecoder\Entity\SurfaceWind;
 use TafDecoder\Entity\Visibility;
+use TafDecoder\Entity\WeatherPhenomenon;
 
 class TafDecoderTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,11 +28,11 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testParse()
     {
-        $raw_taf = "TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM\nCNL\n";
+        $raw_taf = "TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM -SHDZRA\nCNL\n";
         $d       = $this->decoder->parseStrict($raw_taf);
 
         $this->assertTrue($d->isValid());
-        $this->assertEquals("TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM CNL", $d->getRawTaf());
+        $this->assertEquals("TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM -SHDZRA CNL", $d->getRawTaf());
         $this->assertEquals('TAF', $d->getType());
         $this->assertEquals('LIRU', $d->getIcao());
         $this->assertEquals(3, $d->getDay());
@@ -56,7 +57,13 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $v->getVisibility()->getValue());
         $this->assertEquals('SM', $v->getVisibility()->getUnit());
         $this->assertTrue($v->getGreater());
-
+        /** @var WeatherPhenomenon $wp */
+        $wp = $d->getWeather();
+        $this->assertEquals('-', $wp->getIntensityProximity());
+        $this->assertEquals('SH', $wp->getDescriptor());
+        $phenomenons = $wp->getPhenomenons();
+        $this->assertEquals('DZ', $phenomenons[0]);
+        $this->assertEquals('RA', $phenomenons[1]);
     }
 
     /**
