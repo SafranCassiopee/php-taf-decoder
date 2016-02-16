@@ -65,8 +65,9 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $phenomenons = $wp->getPhenomenons();
         $this->assertEquals('DZ', $phenomenons[0]);
         $this->assertEquals('RA', $phenomenons[1]);
+        $cls = $d->getClouds();
         /** @var CloudLayer $cl */
-        $cl = $d->getClouds()[0];
+        $cl = $cls[0];
         $this->assertEquals('BKN', $cl->getAmount());
         $this->assertEquals(2000, $cl->getBaseHeight()->getValue());
         $this->assertEquals('ft', $cl->getBaseHeight()->getUnit());
