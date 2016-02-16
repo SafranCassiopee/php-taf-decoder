@@ -35,6 +35,10 @@ class DecodedTaf
     // weather phenomenons
     private $weather;
 
+    // cloud layers information
+    private $clouds;
+
+
     public function __construct($raw_taf)
     {
         $this->raw_taf = $raw_taf;
@@ -188,6 +192,18 @@ class DecodedTaf
     public function getWeather()
     {
         return $this->weather;
+    }
+
+    public function setClouds(array $clouds)
+    {
+        $this->clouds = $clouds;
+
+        return $this;
+    }
+
+    public function getClouds()
+    {
+        return $this->clouds;
     }
 }
 
