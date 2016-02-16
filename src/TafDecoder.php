@@ -2,7 +2,6 @@
 
 namespace TafDecoder;
 
-use TafDecoder\ChunkDecoder\WeatherChunkDecoder;
 use TafDecoder\Entity\DecodedTaf;
 use TafDecoder\Exception\ChunkDecoderException;
 use TafDecoder\ChunkDecoder\ReportTypeChunkDecoder;
@@ -11,6 +10,8 @@ use TafDecoder\ChunkDecoder\DatetimeChunkDecoder;
 use TafDecoder\ChunkDecoder\ForecastPeriodChunkDecoder;
 use TafDecoder\ChunkDecoder\SurfaceWindChunkDecoder;
 use TafDecoder\ChunkDecoder\VisibilityChunkDecoder;
+use TafDecoder\ChunkDecoder\WeatherChunkDecoder;
+use TafDecoder\ChunkDecoder\CloudChunkDecoder;
 
 class TafDecoder
 {
@@ -30,6 +31,7 @@ class TafDecoder
             new SurfaceWindChunkDecoder(),
             new VisibilityChunkDecoder(),
             new WeatherChunkDecoder(),
+            new CloudChunkDecoder(),
         );
     }
 
