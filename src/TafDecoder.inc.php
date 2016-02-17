@@ -18,6 +18,7 @@ $to_include = array(
     'Entity/Visibility.php',
     'Entity/WeatherPhenomenon.php',
     'Entity/CloudLayer.php',
+    'Entity/Temperature.php',
 
     'Exception/ChunkDecoderException.php',
 
@@ -31,6 +32,7 @@ $to_include = array(
     'ChunkDecoder/VisibilityChunkDecoder.php',
     'ChunkDecoder/WeatherChunkDecoder.php',
     'ChunkDecoder/CloudChunkDecoder.php',
+    'ChunkDecoder/TemperatureChunkDecoder.php',
 );
 
 foreach ($to_include as $file) {

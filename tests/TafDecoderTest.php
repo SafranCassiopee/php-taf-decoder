@@ -9,6 +9,7 @@ use TafDecoder\Entity\SurfaceWind;
 use TafDecoder\Entity\Visibility;
 use TafDecoder\Entity\WeatherPhenomenon;
 use TafDecoder\Entity\CloudLayer;
+use TafDecoder\Entity\Temperature;
 
 class TafDecoderTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,11 +30,11 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testParse()
     {
-        $raw_taf = "TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM -SHDZRA BKN020CB";
+        $raw_taf = "TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM -SHDZRA BKN020CB TX05/0318Z TNM03/0405Z";
         $d       = $this->decoder->parseStrict($raw_taf);
 
         $this->assertTrue($d->isValid());
-        $this->assertEquals("TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM -SHDZRA BKN020CB", $d->getRawTaf());
+        $this->assertEquals("TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM -SHDZRA BKN020CB TX05/0318Z TNM03/0405Z", $d->getRawTaf());
         $this->assertEquals('TAF', $d->getType());
         $this->assertEquals('LIRU', $d->getIcao());
         $this->assertEquals(3, $d->getDay());
@@ -72,6 +73,19 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2000, $cl->getBaseHeight()->getValue());
         $this->assertEquals('ft', $cl->getBaseHeight()->getUnit());
         $this->assertEquals('CB', $cl->getType());
+        /** @var Temperature $mint */
+        $mint = $d->getMinTemperature();
+        $this->assertEquals(-3, $mint->getTemperature()->getValue());
+        $this->assertEquals('deg C', $mint->getTemperature()->getUnit());
+        $this->assertEquals(4, $mint->getDay());
+        $this->assertEquals(5, $mint->getHour());
+        /** @var Temperature $maxt */
+        $maxt = $d->getMaxTemperature();
+        $this->assertEquals(5, $maxt->getTemperature()->getValue());
+        $this->assertEquals('deg C', $maxt->getTemperature()->getUnit());
+        $this->assertEquals(3, $maxt->getDay());
+        $this->assertEquals(18, $maxt->getHour());
+
     }
 
     /**
@@ -80,12 +94,12 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
     public function testParseInvalid()
     {
         // launch decoding (forecast period is invalid)
-        $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0206 23010KT P6SM\nBKN020CB\n");
+        $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0206 23010KT P6SM\nBKN020CB TX05/0318Z TNM03/0405Z\n");
         $this->assertFalse($d->isValid());
         $this->assertEquals(1, count($d->getDecodingExceptions()));
 
         // launch decoding (surface wind is invalid)
-        $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0420 2300ABKT PSSM\nBKN020CB\n");
+        $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0420 2300ABKT PSSM\nBKN020CB TX05/0318Z TNM03/0405Z\n");
         $this->assertFalse($d->isValid());
     }
 
@@ -96,13 +110,13 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
     {
         // strict mode, max 1 error triggered
         $this->decoder->setStrictParsing(true);
-        $d = $this->decoder->parse("TAF TAF LIR 032244Z 0318/0206 23010KT P6SM\n");
+        $d = $this->decoder->parse("TAF TAF LIR 032244Z 0318/0206 23010KT P6SM BKN020CB TX05/0318Z TNM03/0405Z\n");
         $this->assertEquals(1, count($d->getDecodingExceptions()));
 
-        // not strict: several errors triggered (6 because the icao failure causes the next ones to fail too)
+        // not strict: several errors triggered (7 because the icao failure causes the next ones to fail too)
         $this->decoder->setStrictParsing(false);
         $d = $this->decoder->parse("TAF TAF LIR 032244Z 0318/0206 23010KT\n");
-        $this->assertEquals(6, count($d->getDecodingExceptions()));
+        $this->assertEquals(7, count($d->getDecodingExceptions()));
     }
 
     /**
