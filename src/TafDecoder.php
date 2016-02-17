@@ -12,6 +12,7 @@ use TafDecoder\ChunkDecoder\SurfaceWindChunkDecoder;
 use TafDecoder\ChunkDecoder\VisibilityChunkDecoder;
 use TafDecoder\ChunkDecoder\WeatherChunkDecoder;
 use TafDecoder\ChunkDecoder\CloudChunkDecoder;
+use TafDecoder\ChunkDecoder\TemperatureChunkDecoder;
 
 class TafDecoder
 {
@@ -32,6 +33,7 @@ class TafDecoder
             new VisibilityChunkDecoder(),
             new WeatherChunkDecoder(),
             new CloudChunkDecoder(),
+            new TemperatureChunkDecoder(),
         );
     }
 

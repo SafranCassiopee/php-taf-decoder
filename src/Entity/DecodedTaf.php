@@ -25,7 +25,7 @@ class DecodedTaf
     // forecast period
     private $forecast_period;
 
-    // surface wind
+    // surface wind information
     private $surface_wind;
 
     // visibility information
@@ -38,6 +38,9 @@ class DecodedTaf
     // cloud layers information
     private $clouds;
 
+    // temperature information
+    private $min_temperature;
+    private $max_temperature;
 
     public function __construct($raw_taf)
     {
@@ -204,6 +207,28 @@ class DecodedTaf
     public function getClouds()
     {
         return $this->clouds;
+    }
+
+    public function setMinTemperature($minTemperature)
+    {
+        $this->min_temperature = $minTemperature;
+    }
+
+    public function getMinTemperature()
+    {
+        return $this->min_temperature;
+    }
+
+    public function setMaxTemperature($maxTemperature)
+    {
+        $this->max_temperature = $maxTemperature;
+
+        return $this;
+    }
+
+    public function getMaxTemperature()
+    {
+        return $this->max_temperature;
     }
 }
 
