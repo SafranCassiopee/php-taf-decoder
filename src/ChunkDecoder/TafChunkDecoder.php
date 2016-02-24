@@ -6,7 +6,9 @@ abstract class TafChunkDecoder
 {
     /**
      * Extract the corresponding chunk from the remaining taf
-     * @return matches array if any match (null if no match), + updated remaining taf
+     *
+     * @param string $remaining_taf
+     * @return array of matches if any or null if no match, + updated remaining taf
      */
     public function consume($remaining_taf)
     {

@@ -33,7 +33,7 @@ class DecodedTaf
     private $cavok;
 
     // weather phenomenons
-    private $weather;
+    private $weather_phenomenon;
 
     // cloud layers information
     private $clouds;
@@ -42,13 +42,13 @@ class DecodedTaf
     private $min_temperature;
     private $max_temperature;
 
+
     public function __construct($raw_taf)
     {
         $this->raw_taf = $raw_taf;
-
         $this->cavok = false;
-
         $this->decoding_exceptions = array();
+        $this->clouds = array();
     }
 
     /**
@@ -185,21 +185,28 @@ class DecodedTaf
         return $this->cavok;
     }
 
-    public function setWeather($weather)
+    public function setWeatherPhenomenon($weather_phenomenon)
     {
-        $this->weather = $weather;
+        $this->weather_phenomenon = $weather_phenomenon;
 
         return $this;
     }
 
-    public function getWeather()
+    public function getWeatherPhenomenon()
     {
-        return $this->weather;
+        return $this->weather_phenomenon;
     }
 
     public function setClouds(array $clouds)
     {
         $this->clouds = $clouds;
+
+        return $this;
+    }
+
+    public function addCloud($cloud)
+    {
+        $this->clouds[] = $cloud;
 
         return $this;
     }

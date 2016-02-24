@@ -44,7 +44,7 @@ class VisibilityChunkDecoder extends TafChunkDecoder implements TafChunkDecoderI
         } else {
             $cavok = false;
             $visibility = new Visibility();
-            if ($found[2] != null) { // icao visibility
+            if (trim($found[2]) != null) { // icao visibility
                 $visibility->setVisibility(Value::newIntValue($found[2], Value::METER));
             } else { // us visibility
                 $main = intval($found[4]);

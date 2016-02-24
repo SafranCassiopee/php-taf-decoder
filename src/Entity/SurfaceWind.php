@@ -19,6 +19,16 @@ class SurfaceWind
     // boundaries for wind direction variation
     private $direction_variations;
 
+    // array of Evolution entities
+    private $evolutions;
+
+
+    public function __construct()
+    {
+        $this->evolutions = array();
+    }
+
+
     public function withVariableDirection()
     {
         return $this->variable_direction;
@@ -77,5 +87,17 @@ class SurfaceWind
         }
 
         return $this;
+    }
+
+    public function addEvolution($evolution)
+    {
+        $this->evolutions[] = $evolution;
+
+        return $this;
+    }
+
+    public function getEvolutions()
+    {
+        return $this->evolutions;
     }
 }

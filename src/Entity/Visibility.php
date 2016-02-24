@@ -10,10 +10,14 @@ class Visibility
     // visibility is greater than the given value
     private $greater;
 
+    // array of Evolution entities
+    private $evolutions;
+
 
     public function __construct()
     {
         $this->greater = false;
+        $this->evolutions = array();
     }
 
 
@@ -39,5 +43,17 @@ class Visibility
     public function getGreater()
     {
         return $this->greater;
+    }
+
+    public function addEvolution($evolution)
+    {
+        $this->evolutions[] = $evolution;
+
+        return $this;
+    }
+
+    public function getEvolutions()
+    {
+        return $this->evolutions;
     }
 }
