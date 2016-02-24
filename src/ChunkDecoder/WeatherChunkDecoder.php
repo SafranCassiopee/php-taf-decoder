@@ -38,7 +38,7 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         $new_remaining_taf = $result['remaining'];
 
         $weatherPhenom = null;
-        if ($found[1] != null && $found[4] != '//') {
+        if (trim($found[1]) != null && $found[4] != '//') {
             $weatherPhenom = new WeatherPhenomenon();
             $weatherPhenom->setIntensityProximity($found[2]);
             $weatherPhenom->setDescriptor($found[3]);
@@ -49,7 +49,7 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
             }
         }
         $result = array(
-            'weather' => $weatherPhenom,
+            'weatherPhenomenon' => $weatherPhenom,
         );
 
         // return result + remaining taf

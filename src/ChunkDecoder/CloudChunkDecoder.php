@@ -41,7 +41,7 @@ class CloudChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInterf
         // there are clouds, handle cloud layers and visibility
         if($found != null && $found[2] == null){
             for ($i = 3; $i <= 15; $i += 4) {
-                if ($found[$i] != null) {
+                if (trim($found[$i]) != null) {
                     $layer = new CloudLayer();
                     $layer_height = Value::toInt($found[$i+2]);
                     if ($layer_height !== null) {

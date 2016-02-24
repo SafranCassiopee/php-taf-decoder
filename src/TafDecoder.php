@@ -13,6 +13,7 @@ use TafDecoder\ChunkDecoder\VisibilityChunkDecoder;
 use TafDecoder\ChunkDecoder\WeatherChunkDecoder;
 use TafDecoder\ChunkDecoder\CloudChunkDecoder;
 use TafDecoder\ChunkDecoder\TemperatureChunkDecoder;
+use TafDecoder\ChunkDecoder\EvolutionChunkDecoder;
 
 class TafDecoder
 {
@@ -76,6 +77,9 @@ class TafDecoder
 
     /**
      * Decode a full taf string into a complete taf object
+     * @param $raw_taf
+     * @param $strict
+     * @return DecodedTaf
      */
     private function parseWithMode($raw_taf, $strict)
     {
@@ -85,7 +89,13 @@ class TafDecoder
         $clean_taf = preg_replace("#\r+#", ' ', $clean_taf);
         $clean_taf = preg_replace('#[ ]{2,}#', ' ', $clean_taf) . ' ';
         $clean_taf = strtoupper($clean_taf);
-        $remaining_taf = $clean_taf;
+        if (strpos($clean_taf, 'CNL') === false) {
+            // appending END to it is necessary to detect the last line of evolution
+            // but only when the TAF wasn't cancelled (CNL)
+            $remaining_taf = $clean_taf . ' END';
+        } else {
+            $remaining_taf = $clean_taf;
+        }
         $decoded_taf = new DecodedTaf($clean_taf);
         $with_cavok = false;
 
@@ -123,6 +133,12 @@ class TafDecoder
             if ($chunk_decoder instanceof VisibilityChunkDecoder) {
                 $with_cavok = $decoded_taf->getCavok();
             }
+        }
+
+        // weather evolutions
+        $evolutionDecoder = new EvolutionChunkDecoder($strict, $with_cavok);
+        while ($remaining_taf != null && $remaining_taf != 'END') {
+            $remaining_taf = $evolutionDecoder->parse($remaining_taf, $decoded_taf);
         }
 
         return $decoded_taf;

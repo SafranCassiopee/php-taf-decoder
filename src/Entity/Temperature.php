@@ -16,6 +16,15 @@ class Temperature
     // hour of occurrence
     private $hour;
 
+    // array of Evolution entities
+    private $evolutions;
+
+
+    public function __construct()
+    {
+        $this->evolutions = array();
+    }
+
 
     public function setType($type)
     {
@@ -63,5 +72,17 @@ class Temperature
     public function getHour()
     {
         return $this->hour;
+    }
+
+    public function addEvolution($evolution)
+    {
+        $this->evolutions[] = $evolution;
+
+        return $this;
+    }
+
+    public function getEvolutions()
+    {
+        return $this->evolutions;
     }
 }

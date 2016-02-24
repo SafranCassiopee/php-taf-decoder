@@ -13,12 +13,16 @@ class CloudLayer
     // cloud type cumulonimbus, towering cumulonimbus (CB/TCU)
     private $type;
 
+    // array of Evolution entities
+    private $evolutions;
+
 
     public function __construct()
     {
         $this->amount = null;
         $this->base_height = null;
         $this->type = null;
+        $this->evolutions = array();
     }
 
 
@@ -56,5 +60,17 @@ class CloudLayer
         $this->type = $type;
 
         return $this;
+    }
+
+    public function addEvolution($evolution)
+    {
+        $this->evolutions[] = $evolution;
+
+        return $this;
+    }
+
+    public function getEvolutions()
+    {
+        return $this->evolutions;
     }
 }
