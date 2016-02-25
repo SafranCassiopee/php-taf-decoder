@@ -5,8 +5,6 @@ namespace TafDecoder\ChunkDecoder;
 use TafDecoder\Exception\ChunkDecoderException;
 use TafDecoder\Entity\DecodedTaf;
 use TafDecoder\Entity\Evolution;
-use TafDecoder\Entity\SurfaceWind;
-use TafDecoder\Entity\Visibility;
 use TafDecoder\Entity\CloudLayer;
 use TafDecoder\Entity\WeatherPhenomenon;
 use TafDecoder\Entity\Temperature;
@@ -22,6 +20,8 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
 
     private $with_cavok;
 
+    private $remaining;
+
 
     public function __construct($strict, $with_cavok)
     {
@@ -36,6 +36,16 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         );
     }
 
+
+    public function setStrict($strict)
+    {
+        $this->strict = $strict;
+    }
+
+    public function getRemaining()
+    {
+        return $this->remaining;
+    }
 
     public function getRegexp()
     {
@@ -59,9 +69,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         $evo_period = trim($found[2]);
         $remaining = $found[3];
 
-
         if ($found == null) {
-            return null;
+            // the first chunk didn't match anything, so we remove it to avoid an infinite loop
+            $this->remaining = preg_replace('#(\S+\s+)(.*)#', '', $remaining_taf);
+            return;
         }
 
         $evolution = new Evolution();
@@ -86,7 +97,7 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         // rest
         $remaining = $this->parseEntitiesChunk($evolution, $remaining, $decoded_taf);
 
-        return $remaining;
+        $this->remaining = $remaining;
     }
 
     /**
@@ -108,9 +119,6 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
 
         // call each decoder in the chain and use results to populate the decoded taf
         foreach ($this->decoder_chain as $chunk_decoder) {
-            if ($remaining_evo == null) {
-                continue;
-            }
             try {
                 // we check for probability in each loop, as it can be anywhere
                 $remaining_evo = $this->probabilityChunkDecoder($evolution, $remaining_evo, $decoded_taf);
@@ -133,7 +141,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
                 $entity = $result[$entity_name];
                 if ($entity == null && $entity_name != 'visibility') {
                     // visibility will be null if cavok is true but we still want to add the evolution
-                    continue;
+                    throw new ChunkDecoderException($chunk,
+                        $remaining_evo,
+                        'Bad format for weather evolution',
+                        $this);
                 }
                 if ($entity_name == 'maxTemperature') {
                     $this->addEvolution($decoded_taf, $evolution, $result, 'maxTemperature');
@@ -155,7 +166,7 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
                     } else {
                         // we tried all the chunk decoders on the first chunk and none of them got a match,
                         // so we drop it
-                        $remaining_evo = preg_replace('#(\S+\s+)(.*)#', '', $remaining_evo);
+                        $remaining_evo = preg_replace('#(\S+\s+)#', '', $remaining_evo);
                     }
                 }
             }
@@ -201,15 +212,12 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
             $embeddedEvolution->setToDay(intval(mb_substr($periodArr[1], 0, 2)));
             $embeddedEvolution->setToTime(mb_substr($periodArr[1], 2, 2) . ':00 UTC');
 
-            $evolution->setEvolution($embeddedEvolution);
+            $evolution->addEvolution($embeddedEvolution);
             // recurse on the remaining chunk to extract the weather elements it contains
-            $remaining_chunk = $this->parseEntitiesChunk($evolution, $remaining, $decoded_taf);
-
-        } else {
-            $remaining_chunk = $chunk;
+            $chunk = $this->parseEntitiesChunk($evolution, $remaining, $decoded_taf);
         }
 
-        return $remaining_chunk;
+        return $chunk;
     }
 
     /**
@@ -262,19 +270,17 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
      */
     private function instantiateEntity($entity_name)
     {
-        switch ($entity_name) {
-            case 'surfaceWind':
-                return new SurfaceWind();
-            case 'visibility':
-                return new Visibility();
-            case 'weatherPhenomenon':
-                return new WeatherPhenomenon();
-            case 'clouds':
-                return new CloudLayer();
-            case 'maxTemperature':
-                return new Temperature();
-            case 'minTemperature':
-                return new Temperature();
+        // Note: surfaceWind and visibility aren't here because they're mandatory in the main forecast
+
+        if ($entity_name == 'weatherPhenomenon') {
+            return new WeatherPhenomenon();
+        } else if ($entity_name == 'maxTemperature') {
+            return new Temperature();
+        } else if ($entity_name == 'minTemperature') {
+            return new Temperature();
         }
+
+        // if we're still here, $entity_name can only be 'clouds' (this exception is required to get 100% code coverage)
+        return new CloudLayer();
     }
 }

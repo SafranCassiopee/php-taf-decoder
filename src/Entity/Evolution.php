@@ -27,8 +27,14 @@ class Evolution
     // optional annotation corresponding to the probability (PROBnn)
     private $probability;
 
-    // an evolution can contain embeded evolutions with different probabilities
-    private $evolution;
+    // an evolution can contain embedded evolutions with different probabilities
+    private $evolutions;
+
+
+    public function __construct()
+    {
+        $this->evolutions = array();
+    }
 
 
     public function setType($type)
@@ -127,15 +133,15 @@ class Evolution
         return $this->probability;
     }
 
-    public function setEvolution($evolution)
+    public function addEvolution($evolution)
     {
-        $this->evolution = $evolution;
+        $this->evolutions[] = $evolution;
 
         return $this;
     }
 
-    public function getEvolution()
+    public function getEvolutions()
     {
-        return $this->evolution;
+        return $this->evolutions;
     }
 }

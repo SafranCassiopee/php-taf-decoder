@@ -27,10 +27,10 @@ class WeatherChunkDecoderTest extends \PHPUnit_Framework_TestCase
     {
         $decoded = $this->decoder->parse($chunk);
         /** @var WeatherPhenomenon $weather */
-        $weather = $decoded['result']['weather'];
+        $weather = $decoded['result']['weatherPhenomenon'];
         $this->assertEquals($weather_intens, $weather->getIntensityProximity());
         $this->assertEquals($weather_desc, $weather->getDescriptor());
-        $this->assertEquals($weather_phenom, $weather->getPhenomenons());
+        $this->assertEquals($weather_phenom, $weather->getPhenomena());
         $this->assertEquals($remaining, $decoded['remaining_taf']);
     }
 

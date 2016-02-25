@@ -88,12 +88,6 @@ class TemperatureChunkDecoderTest extends \PHPUnit_Framework_TestCase
     public function getInvalidChunk()
     {
         return array(
-            array("chunk" => "AAA"),
-            array("chunk" => "TX04"),
-            array("chunk" => "TX04/0102"),
-            array("chunk" => "TX04/0102Z"),
-            array("chunk" => "TX04/0102Z TX05/0203Z"),
-            array("chunk" => "TX04/0102Z TN3/0203Z"),
             array("chunk" => "TX04/0102Z TN05/0203Z"),
         );
     }

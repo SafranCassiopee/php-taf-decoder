@@ -92,7 +92,7 @@ class TafDecoder
         if (strpos($clean_taf, 'CNL') === false) {
             // appending END to it is necessary to detect the last line of evolution
             // but only when the TAF wasn't cancelled (CNL)
-            $remaining_taf = $clean_taf . ' END';
+            $remaining_taf = trim($clean_taf) . ' END';
         } else {
             $remaining_taf = $clean_taf;
         }
@@ -137,8 +137,9 @@ class TafDecoder
 
         // weather evolutions
         $evolutionDecoder = new EvolutionChunkDecoder($strict, $with_cavok);
-        while ($remaining_taf != null && $remaining_taf != 'END') {
-            $remaining_taf = $evolutionDecoder->parse($remaining_taf, $decoded_taf);
+        while ($remaining_taf != null && trim($remaining_taf) != 'END') {
+            $evolutionDecoder->parse($remaining_taf, $decoded_taf);
+            $remaining_taf = $evolutionDecoder->getRemaining();
         }
 
         return $decoded_taf;

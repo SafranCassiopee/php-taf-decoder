@@ -60,12 +60,12 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SM', $v->getVisibility()->getUnit());
         $this->assertTrue($v->getGreater());
         /** @var WeatherPhenomenon $wp */
-        $wp = $d->getWeather();
+        $wp = $d->getWeatherPhenomenon();
         $this->assertEquals('-', $wp->getIntensityProximity());
         $this->assertEquals('SH', $wp->getDescriptor());
-        $phenomenons = $wp->getPhenomenons();
-        $this->assertEquals('DZ', $phenomenons[0]);
-        $this->assertEquals('RA', $phenomenons[1]);
+        $phenomena = $wp->getPhenomena();
+        $this->assertEquals('DZ', $phenomena[0]);
+        $this->assertEquals('RA', $phenomena[1]);
         $cls = $d->getClouds();
         /** @var CloudLayer $cl */
         $cl = $cls[0];
@@ -93,6 +93,10 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseInvalid()
     {
+        // launch decoding (forecast was cancelled)
+        $d = $this->decoder->parseNotStrict("TAF LFMT 032244Z 0318/0206 CNL");
+        $this->assertFalse($d->isValid());
+
         // launch decoding (forecast period is invalid)
         $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0206 23010KT P6SM\nBKN020CB TX05/0318Z TNM03/0405Z\n");
         $this->assertFalse($d->isValid());
@@ -113,10 +117,10 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $d = $this->decoder->parse("TAF TAF LIR 032244Z 0318/0206 23010KT P6SM BKN020CB TX05/0318Z TNM03/0405Z\n");
         $this->assertEquals(1, count($d->getDecodingExceptions()));
 
-        // not strict: several errors triggered (7 because the icao failure causes the next ones to fail too)
+        // not strict: several errors triggered (6 because the icao failure causes the next ones to fail too)
         $this->decoder->setStrictParsing(false);
         $d = $this->decoder->parse("TAF TAF LIR 032244Z 0318/0206 23010KT\n");
-        $this->assertEquals(7, count($d->getDecodingExceptions()));
+        $this->assertEquals(6, count($d->getDecodingExceptions()));
     }
 
     /**
@@ -125,9 +129,9 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
     public function testParseErrors()
     {
         $error_dataset = array(
-            array('TAF LFPG aaa bbb cccc', 'DatetimeChunkDecoder', 'AAA BBB CCCC'),
-            array('TAF LFPO 231027Z NIL 1234', 'ForecastPeriodChunkDecoder', 'NIL 1234'),
-            array('TAF LFPO 231027Z 2310/2411 NIL 12345 ','SurfaceWindChunkDecoder','NIL 12345'),
+            array('TAF LFPG aaa bbb cccc', 'DatetimeChunkDecoder', 'AAA BBB CCCC END'),
+            array('TAF LFPO 231027Z NIL 1234', 'ForecastPeriodChunkDecoder', 'NIL 1234 END'),
+            array('TAF LFPO 231027Z 2310/2411 NIL 12345 ','SurfaceWindChunkDecoder','NIL 12345 END'),
         );
 
         foreach ($error_dataset as $taf_error) {
