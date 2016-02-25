@@ -32,7 +32,7 @@ class DecodedTaf
     private $visibility;
     private $cavok;
 
-    // weather phenomenons
+    // weather phenomenon
     private $weather_phenomenon;
 
     // cloud layers information

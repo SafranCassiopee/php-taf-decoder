@@ -10,8 +10,8 @@ class WeatherPhenomenon
     // characteristics of the phenomenon
     private $descriptor;
 
-    // types of phenomenon
-    private $phenomenons;
+    // types of phenomena
+    private $phenomena;
 
     // array of Evolution entities
     private $evolutions;
@@ -19,7 +19,7 @@ class WeatherPhenomenon
 
     public function __construct()
     {
-        $this->phenomenons = array();
+        $this->phenomena = array();
         $this->evolutions = array();
     }
 
@@ -50,14 +50,14 @@ class WeatherPhenomenon
 
     public function addPhenomenon($phenomenon)
     {
-        $this->phenomenons[] = $phenomenon;
+        $this->phenomena[] = $phenomenon;
 
         return $this;
     }
 
-    public function getPhenomenons()
+    public function getPhenomena()
     {
-        return $this->phenomenons;
+        return $this->phenomena;
     }
 
     public function addEvolution($evolution)
