@@ -18,7 +18,7 @@ Raw TAF format is highly standardized through the International Civil Aviation O
 
 *    [TAF definition on wikipedia](https://en.wikipedia.org/wiki/Terminal_aerodrome_forecast)
 *    [TAF format specification](http://www.wmo.int/pages/prog/www/WMOCodes/WMO306_vI1/VolumeI.1.html)
-
+me
 Requirements
 ------------
 
@@ -77,15 +77,16 @@ The returned object is a DecodedTaf object from which you can retrieve all the w
 
 All values who have a unit are based on the `Value` object which provides the methods `getValue()` and `getUnit()`
 
-*TODO: full documentation of the structure of the DecodedMetar object*
+*TODO: full documentation of the structure of the DecodedTaf object*
+
 *TODO: Provide a PHP example*
 
 Contribute
 ----------
 
-If you find a valid METAR that is badly parsed by this library, please open a github issue with all possible details:
+If you find a valid TAF that is badly parsed by this library, please open a github issue with all possible details:
 
-- the full METAR causing problem
+- the full TAF causing problem
 - the parsing exception returned by the library
 - how you expected the decoder to behave
 - anything to support your proposal (links to official websites appreciated)
