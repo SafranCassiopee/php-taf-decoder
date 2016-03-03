@@ -2,26 +2,24 @@
 
 namespace TafDecoder\Test\ChunkDecoder;
 
+use TafDecoder\TafDecoder;
 use TafDecoder\ChunkDecoder\EvolutionChunkDecoder;
 use TafDecoder\Entity\DecodedTaf;
-use TafDecoder\Entity\ForecastPeriod;
 use TafDecoder\Entity\Evolution;
-use TafDecoder\Entity\SurfaceWind;
-use TafDecoder\Entity\Visibility;
-use TafDecoder\Entity\CloudLayer;
-use TafDecoder\Entity\Value;
 
 class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
 {
-    private $decoder;
+    private $taf_decoder;
+    private $evo_decoder;
 
     protected function setup()
     {
-        $this->decoder = new EvolutionChunkDecoder(true, false);
+        $this->taf_decoder = new TafDecoder();
+        $this->evo_decoder = new EvolutionChunkDecoder(true, false);
     }
 
     /**
-     * Test parsing of valid evolution chunks
+     * Test parsing of evolution chunks
      *
      * @param $strict
      * @param $base
@@ -33,14 +31,13 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
      * @param $toD
      * @param $toT
      * @param $elements
-     * @param $remaining
      * @dataProvider getChunk
      */
-    public function testParse($strict, $base, $evoChunk, $type, $probability, $fromD, $fromT, $toD, $toT, $elements, $remaining)
+    public function testParse($strict, $base, $evoChunk, $type, $probability, $fromD, $fromT, $toD, $toT, $elements)
     {
         $decoded_taf = $this->getDecodedTaf($base);
-        $this->decoder->setStrict($strict);
-        $this->decoder->parse($evoChunk . ' END', $decoded_taf);
+        $this->evo_decoder->setStrict($strict);
+        $this->evo_decoder->parse($evoChunk . ' END', $decoded_taf);
 
         /** @var array $windEvolutions */
         $windEvolutions = $decoded_taf->getSurfaceWind()->getEvolutions();
@@ -115,6 +112,7 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
+                // common cases
                 "strict"                => true,
                 "base"                  => 'TAF KJFK 080500Z 0806/0910 23010KT 6 1/4SM BKN020',
                 "evoChunk"              => 'BECMG 0807/0810 23024KT P6SM +SHRA BKN025 TX08/0910Z TNM01/0904',
@@ -139,9 +137,9 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
                     "max_temp_val"          => 8,
                     "emb_evolution_type"    => null,
                 ),
-                "remaining"             => '',
             ),
             array(
+                // line starting with PROB
                 "strict"                => true,
                 "base"                  => 'TAF KJFK 080500Z 0806/0910 23010KT 6 1/4SM BKN020',
                 "chunk"                 => "PROB40 TEMPO 0807/0810 23024KT CAVOK BKN025",
@@ -166,9 +164,9 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
                     "max_temp_val"          => null,
                     "emb_evolution_type"    => null,
                 ),
-                "remaining"             => '',
             ),
             array(
+                // embedded evolutions
                 "strict"                => true,
                 "base"                  => 'TAF KJFK 080500Z 0806/0910 23010KT',
                 "chunk"                 => "BECMG 0807/0810 23024KT CAVOK -RA PROB40 TEMPO 0808/0809 18020KT",
@@ -193,22 +191,22 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
                     "max_temp_val"          => null,
                     "emb_evolution_type"    => 'TEMPO',
                 ),
-                "remaining"             => '',
             ),
             array(
-                "strict"                => true,
-                "base"                  => 'TAF KJFK 080500Z 0806/0910 32010KT BKN025',
-                "chunk"                 => 'BECMG 0807/0810 BKN018 PROB40 0808/0809 18020KT 9000',
+                // surfaceWind and visibility entities
+                "strict"                => false,
+                "base"                  => 'TAF BAH KJFK 080500Z 0806/0910 TX10/0807Z TN05/0904Z',
+                "chunk"                 => 'BECMG 0810/0812 27010KT 4000 -RA BKN025',
                 "type"                  => 'BECMG',
-                "probability"           => 'PROB40',
+                "probability"           => '',
                 "from_day"              => 8,
-                "from_time"             => '07:00 UTC',
+                "from_time"             => '10:00 UTC',
                 "to_day"                => 8,
-                "to_time"               => '10:00 UTC',
+                "to_time"               => '12:00 UTC',
                 "elements"              => array(
-                    "wind_dir"              => 180,
-                    "wind_speed"            => 20,
-                    "visibility"            => 9000,
+                    "wind_dir"              => 270,
+                    "wind_speed"            => 10,
+                    "visibility"            => 4000,
                     "cavok"                 => false,
                     "greater"               => false,
                     "weather_phenomena"     => null,
@@ -220,49 +218,22 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
                     "max_temp_val"          => null,
                     "emb_evolution_type"    => null,
                 ),
-                "remaining"             => '',
             ),
             array(
-                "strict"                => true,
-                "base"                  => 'TAF KJFK 081009Z 0810/0912 03017G28KT P6SM BKN020 OVC080',
-                "chunk"                 => 'FM081200 03018G27KT 5SM -SN OVC015 PROB40 0810/0910 AAA',
-                "type"                  => 'FM',
-                "probability"           => '',
-                "from_day"              => 8,
-                "from_time"             => '12:00 UTC',
-                "to_day"                => null,
-                "to_time"               => '',
-                "elements"              => array(
-                    "wind_dir"              => 30,
-                    "wind_speed"            => 18,
-                    "visibility"            => 5,
-                    "cavok"                 => false,
-                    "greater"               => false,
-                    "weather_phenomena"     => array('SN'),
-                    "weather_intensity"     => '-',
-                    "weather_desc"          => '',
-                    "clouds_amount"         => 'OVC',
-                    "clouds_base_height"    => 1500,
-                    "min_temp_val"          => null,
-                    "max_temp_val"          => null,
-                    "emb_evolution_type"    => null,
-                ),
-                "remaining"             => '',
-            ),
-            array(
+                // drop a chunk that doesn't match with any decoder
                 "strict"                => false,
-                "base"                  => 'TAF KJFK 081009Z 0810/0912 03017G28KT P6SM BKN020 OVC080',
-                "chunk"                 => 'FM081200 03018G27KT 5SM -SN OVC015 PROB40 0810/0910 AAA',
+                "base"                  => 'TAF KJFK 081009Z 0810/0912 03017G28KT 9000 BKN020',
+                "chunk"                 => 'FM081100 03018G27KT 6000 -SN OVC015 PROB40 0811/0912 AAA',
                 "type"                  => 'FM',
                 "probability"           => '',
                 "from_day"              => 8,
-                "from_time"             => '12:00 UTC',
+                "from_time"             => '11:00 UTC',
                 "to_day"                => null,
                 "to_time"               => '',
                 "elements"              => array(
                     "wind_dir"              => 30,
                     "wind_speed"            => 18,
-                    "visibility"            => 5,
+                    "visibility"            => 6000,
                     "cavok"                 => false,
                     "greater"               => false,
                     "weather_phenomena"     => array('SN'),
@@ -274,7 +245,33 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
                     "max_temp_val"          => null,
                     "emb_evolution_type"    => null,
                 ),
-                "remaining"             => '',
+            ),
+            array(
+                // trigger a ChunkDecoderException
+                "strict"                => true,
+                "base"                  => 'TAF KJFK 081009Z 0810/0912 03017G28KT 9000 BKN020',
+                "chunk"                 => 'FM081200 03018G27KT 7000 -SN OVC015 PROB40 0810/0910 BK025',
+                "type"                  => 'FM',
+                "probability"           => '',
+                "from_day"              => 8,
+                "from_time"             => '12:00 UTC',
+                "to_day"                => null,
+                "to_time"               => '',
+                "elements"              => array(
+                    "wind_dir"              => 30,
+                    "wind_speed"            => 18,
+                    "visibility"            => 7000,
+                    "cavok"                 => false,
+                    "greater"               => false,
+                    "weather_phenomena"     => array('SN'),
+                    "weather_intensity"     => '-',
+                    "weather_desc"          => '',
+                    "clouds_amount"         => 'OVC',
+                    "clouds_base_height"    => 1500,
+                    "min_temp_val"          => null,
+                    "max_temp_val"          => null,
+                    "emb_evolution_type"    => null,
+                ),
             ),
         );
     }
@@ -287,38 +284,7 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function getDecodedTaf($raw_taf)
     {
-        /** @var ForecastPeriod $fp */
-        $fp = new ForecastPeriod();
-        $fp->setFromDay(8);
-        $fp->setFromHour(6);
-        $fp->setToDay(9);
-        $fp->setToHour(10);
-
-        /** @var SurfaceWind $sv */
-        $sw = new SurfaceWind();
-        $sw->setMeanDirection(new Value(230, 'deg'));
-        $sw->setVariableDirection(false);
-        $sw->setMeanSpeed(new Value(10, 'kt'));
-
-        /** @var Visibility $visi */
-        $visi = new Visibility();
-        $visi->setVisibility(new Value(9000, 'm'));
-
-        /** @var CloudLayer $cl */
-        $cl = new CloudLayer();
-        $cl->setAmount('BKN');
-        $cl->setBaseHeight(new Value(2000, 'ft'));
-
-        /** @var DecodedTaf $decoded_taf */
-        $decoded_taf = new DecodedTaf($raw_taf);
-        $decoded_taf->setType('TAF');
-        $decoded_taf->setIcao('LFPO');
-        $decoded_taf->setDay(8);
-        $decoded_taf->setTime('05:00 UTC');
-        $decoded_taf->setForecastPeriod($fp);
-        $decoded_taf->setSurfaceWind($sw);
-        $decoded_taf->setVisibility($visi);
-        $decoded_taf->addCloud($cl);
+        $decoded_taf = $this->taf_decoder->parseStrict($raw_taf);
 
         return $decoded_taf;
     }

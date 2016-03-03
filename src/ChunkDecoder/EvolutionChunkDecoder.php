@@ -2,6 +2,8 @@
 
 namespace TafDecoder\ChunkDecoder;
 
+use TafDecoder\Entity\SurfaceWind;
+use TafDecoder\Entity\Visibility;
 use TafDecoder\Exception\ChunkDecoderException;
 use TafDecoder\Entity\DecodedTaf;
 use TafDecoder\Entity\Evolution;
@@ -270,17 +272,22 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
      */
     private function instantiateEntity($entity_name)
     {
-        // Note: surfaceWind and visibility aren't here because they're mandatory in the main forecast
+        $entity = null;
 
         if ($entity_name == 'weatherPhenomenon') {
-            return new WeatherPhenomenon();
+            $entity = new WeatherPhenomenon();
         } else if ($entity_name == 'maxTemperature') {
-            return new Temperature();
+            $entity =  new Temperature();
         } else if ($entity_name == 'minTemperature') {
-            return new Temperature();
+            $entity = new Temperature();
+        } else if ($entity_name == 'clouds') {
+            $entity = new CloudLayer();
+        } else if ($entity_name == 'surfaceWind') {
+            $entity = new SurfaceWind();
+        } else if ($entity_name = 'visibility') {
+            $entity = new Visibility();
         }
 
-        // if we're still here, $entity_name can only be 'clouds' (this exception is required to get 100% code coverage)
-        return new CloudLayer();
+        return $entity;
     }
 }
