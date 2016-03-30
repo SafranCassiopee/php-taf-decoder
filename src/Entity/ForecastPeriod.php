@@ -37,7 +37,7 @@ class ForecastPeriod
         if ($this->getToDay() < 1 || $this->getToDay() > 31) {
             return false;
         }
-        if ($this->getFromHour() > 23 || $this->getToHour() > 23) {
+        if ($this->getFromHour() > 24 || $this->getToHour() > 24) {
             return false;
         }
 
