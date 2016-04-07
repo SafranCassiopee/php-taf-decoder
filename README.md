@@ -55,6 +55,7 @@ Load the library thanks to composer autoloading:
 ```php
 <?php
 require_once 'vendor/autoload.php';
+```
 
 - By hand
 
