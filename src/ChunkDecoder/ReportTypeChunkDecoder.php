@@ -9,7 +9,7 @@ class ReportTypeChunkDecoder extends TafChunkDecoder implements TafChunkDecoderI
 {
     public function getRegexp()
     {
-        return '#^((TAF)( TAF)*( AMD){0,1}) #';
+        return '#^((TAF)( TAF)*( AMD| COR){0,1}) #';
     }
 
     public function parse($remaining_taf, $cavok = false)
