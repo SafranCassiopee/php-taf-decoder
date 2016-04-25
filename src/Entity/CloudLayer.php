@@ -2,7 +2,7 @@
 
 namespace TafDecoder\Entity;
 
-class CloudLayer
+class CloudLayer extends InformationBase
 {
     // annotation corresponding to amount of clouds (FEW/SCT/BKN/OVC)
     private $amount;

@@ -2,7 +2,7 @@
 
 namespace TafDecoder\Entity;
 
-class SurfaceWind
+class SurfaceWind extends InformationBase
 {
     // wind direction
     private $mean_direction;
