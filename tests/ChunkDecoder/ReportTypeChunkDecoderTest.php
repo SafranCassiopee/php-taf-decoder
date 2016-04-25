@@ -55,6 +55,11 @@ class ReportTypeChunkDecoderTest extends \PHPUnit_Framework_TestCase
                 "type"      => null,
                 "remaining" => "123 LFPO",
             ),
+            array(
+                "chunk"     => "TAF COR LFPO",
+                "type"      => "TAF COR",
+                "remaining" => "LFPO",
+            ),
         );
     }
 }
