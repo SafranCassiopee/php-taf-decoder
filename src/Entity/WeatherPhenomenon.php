@@ -2,7 +2,7 @@
 
 namespace TafDecoder\Entity;
 
-class WeatherPhenomenon
+class WeatherPhenomenon extends InformationBase
 {
     // intensity/proximity of the phenomenon + / - / VC (heavy, light, vicinity)
     private $intensity_proximity;
