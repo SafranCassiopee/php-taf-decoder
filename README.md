@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/SagemCassiopee/php-taf-decoder.svg?branch=master)](https://travis-ci.org/SagemCassiopee/php-taf-decoder)
-[![Coverage Status](https://coveralls.io/repos/github/SagemCassiopee/php-taf-decoder/badge.svg?branch=master)](https://coveralls.io/github/SagemCassiopee/php-taf-decoder?branch=master)
+[![Build Status](https://travis-ci.org/SafranCassiopee/php-taf-decoder.svg?branch=master)](https://travis-ci.org/SafranCassiopee/php-taf-decoder)
+[![Coverage Status](https://coveralls.io/repos/github/SafranCassiopee/php-taf-decoder/badge.svg?branch=master)](https://coveralls.io/github/SafranCassiopee/php-taf-decoder?branch=master)
 
 PHP TAF decoder
 =================
@@ -39,7 +39,7 @@ Add the following line to the `composer.json` of your project
 ```json
 {
     "require": {
-        "sagem-cassiopee/php-taf-decoder": "dev-master"
+        "safran-cassiopee/php-taf-decoder": "dev-master"
     }
 }
 ```
@@ -59,7 +59,7 @@ require_once 'vendor/autoload.php';
 
 - By hand
 
-Download the latest release from [github](https://github.com/SagemCassiopee/php-taf-decoder/releases)
+Download the latest release from [github](https://github.com/SafranCassiopee/php-taf-decoder/releases)
 
 Extract it wherever you want in your project. The library itself is in the src/ directory, the other directories are not mandatory for the library to work.
 
