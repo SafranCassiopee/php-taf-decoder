@@ -9,6 +9,11 @@ A PHP library to decode TAF (Terminal Aerodrome Forecast) strings, fully unit te
 
 Try it on the [demo website](https://php-taf-decoder.cassiopee.aero)
 
+They use php-taf-decoder in production:
+
+- [Safran Cassiopée](http://www.cassiopee.aero/) (private)
+- Your service here ? Submit a pull request or open an issue !
+
 Introduction
 ------------
 
