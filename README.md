@@ -1,6 +1,7 @@
 [![License](https://poser.pugx.org/safran-cassiopee/php-taf-decoder/license.svg)](https://packagist.org/packages/safran-cassiopee/php-taf-decoder)
 [![Build Status](https://travis-ci.org/SafranCassiopee/php-taf-decoder.svg?branch=master)](https://travis-ci.org/SafranCassiopee/php-taf-decoder)
 [![Coverage Status](https://coveralls.io/repos/github/SafranCassiopee/php-taf-decoder/badge.svg?branch=master)](https://coveralls.io/github/SafranCassiopee/php-taf-decoder?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/safran-cassiopee/php-taf-decoder/v/stable.svg)](https://packagist.org/packages/safran-cassiopee/php-taf-decoder)
 
 PHP TAF decoder
 =================
