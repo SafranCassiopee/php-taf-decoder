@@ -126,15 +126,6 @@ class ForecastPeriodChunkDecoderTest extends \PHPUnit_Framework_TestCase
                 "remaining" => "CNL",
             ),
             array(
-                "chunk"     => "2818/2610 CNL",
-                "from_day"  => 28,
-                "from_hour" => 18,
-                "to_day"    => 26,
-                "to_hour"   => 10,
-                "is_valid"  => false,
-                "remaining" => "CNL",
-            ),
-            array(
                 "chunk"     => "2818/2818 CNL",
                 "from_day"  => 28,
                 "from_hour" => 18,

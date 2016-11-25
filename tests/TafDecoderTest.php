@@ -97,11 +97,6 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $d = $this->decoder->parseNotStrict("TAF LFMT 032244Z 0318/0206 CNL");
         $this->assertFalse($d->isValid());
 
-        // launch decoding (forecast period is invalid)
-        $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0206 23010KT P6SM\nBKN020CB TX05/0318Z TNM03/0405Z\n");
-        $this->assertFalse($d->isValid());
-        $this->assertEquals(1, count($d->getDecodingExceptions()));
-
         // launch decoding (surface wind is invalid)
         $d = $this->decoder->parseNotStrict("TAF TAF LIRU 032244Z 0318/0420 2300ABKT PSSM\nBKN020CB TX05/0318Z TNM03/0405Z\n");
         $this->assertFalse($d->isValid());
