@@ -41,10 +41,6 @@ class ForecastPeriod
             return false;
         }
 
-        // check that start is before end
-        if ($this->getFromDay() > $this->getToDay()) {
-            return false;
-        }
         if ($this->getFromDay() == $this->getToDay() && $this->getFromHour() >= $this->getToHour()) {
             return false;
         }
