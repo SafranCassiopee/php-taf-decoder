@@ -1,5 +1,7 @@
-[![Build Status](https://travis-ci.org/SagemCassiopee/php-taf-decoder.svg?branch=master)](https://travis-ci.org/SagemCassiopee/php-taf-decoder)
-[![Coverage Status](https://coveralls.io/repos/github/SagemCassiopee/php-taf-decoder/badge.svg?branch=master)](https://coveralls.io/github/SagemCassiopee/php-taf-decoder?branch=master)
+[![License](https://poser.pugx.org/safran-cassiopee/php-taf-decoder/license.svg)](https://packagist.org/packages/safran-cassiopee/php-taf-decoder)
+[![Build Status](https://travis-ci.org/SafranCassiopee/php-taf-decoder.svg?branch=master)](https://travis-ci.org/SafranCassiopee/php-taf-decoder)
+[![Coverage Status](https://coveralls.io/repos/github/SafranCassiopee/php-taf-decoder/badge.svg?branch=master)](https://coveralls.io/github/SafranCassiopee/php-taf-decoder?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/safran-cassiopee/php-taf-decoder/v/stable.svg)](https://packagist.org/packages/safran-cassiopee/php-taf-decoder)
 
 PHP TAF decoder
 =================
@@ -7,6 +9,11 @@ PHP TAF decoder
 A PHP library to decode TAF (Terminal Aerodrome Forecast) strings, fully unit tested (100% code coverage) 
 
 Try it on the [demo website](https://php-taf-decoder.cassiopee.aero)
+
+They use php-taf-decoder in production:
+
+- [Safran Cassiopée](http://www.cassiopee.aero/) (private)
+- Your service here ? Submit a pull request or open an issue !
 
 Introduction
 ------------
@@ -39,7 +46,7 @@ Add the following line to the `composer.json` of your project
 ```json
 {
     "require": {
-        "sagem-cassiopee/php-taf-decoder": "dev-master"
+        "safran-cassiopee/php-taf-decoder": "dev-master"
     }
 }
 ```
@@ -59,7 +66,7 @@ require_once 'vendor/autoload.php';
 
 - By hand
 
-Download the latest release from [github](https://github.com/SagemCassiopee/php-taf-decoder/releases)
+Download the latest release from [github](https://github.com/SafranCassiopee/php-taf-decoder/releases)
 
 Extract it wherever you want in your project. The library itself is in the src/ directory, the other directories are not mandatory for the library to work.
 
@@ -120,4 +127,5 @@ You can also generate an html coverage report by adding the `--coverage-html` op
 
 ```shell
 ./vendor/bin/phpunit --coverage-html ./report tests
-```
+``
+

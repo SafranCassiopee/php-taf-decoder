@@ -1,5 +1,5 @@
 {
-    "name": "sagem-cassiopee/php-taf-decoder",
+    "name": "safran-cassiopee/php-taf-decoder",
     "type": "library",
     "license": "GPL-3.0+",
     "description": "TAF weather forecast decoder",
