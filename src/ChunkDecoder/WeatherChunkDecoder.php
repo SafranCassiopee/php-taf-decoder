@@ -19,15 +19,15 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         'SA', 'DU', 'HZ', 'FU',
         'VA', 'PY', 'DU', 'PO',
         'SQ', 'FC', 'DS', 'SS',
-        '//',
+        '//', "NSW"
     );
 
     public function getRegexp()
     {
         $desc_regexp = implode(self::$desc_dic, '|');
         $phenom_regexp = implode(self::$phenom_dic, '|');
-        $pw_regexp = "([-+]|VC)?($desc_regexp)?($phenom_regexp)?($desc_regexp)?($phenom_regexp)?";
-
+        $pw_regexp = "([-+]|VC)?($desc_regexp)?($phenom_regexp)?(?:\s)?($desc_regexp)?($phenom_regexp)?";
+        
         return "#^($pw_regexp )?()?#";
     }
 

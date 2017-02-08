@@ -65,6 +65,34 @@ class WeatherChunkDecoderTest extends \PHPUnit_Framework_TestCase
                 "weather_phenom"    => array("RA","BR"),
                 "remaining"         => "DDD",
             ),
+            array(
+                "chunk"             => "-SN BR DDD",
+                "weather_inten"     => "-",
+                "weather_desc"      => "",
+                "weather_phenom"    => array("SN","BR"),
+                "remaining"         => "DDD",
+            ),
+            array(
+                "chunk"             => "-RA BR DDD",
+                "weather_inten"     => "-",
+                "weather_desc"      => "",
+                "weather_phenom"    => array("RA","BR"),
+                "remaining"         => "DDD",
+            ),
+            array(
+                "chunk"             => "NSW DDD",
+                "weather_inten"     => "",
+                "weather_desc"      => "",
+                "weather_phenom"    => array("NSW"),
+                "remaining"         => "DDD",
+            ),
+            array(
+                "chunk"             => "-DZ FG DDD",
+                "weather_inten"     => "-",
+                "weather_desc"      => "",
+                "weather_phenom"    => array("DZ", "FG"),
+                "remaining"         => "DDD",
+            ),
         );
     }
 }
