@@ -60,7 +60,7 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SM', $v->getVisibility()->getUnit());
         $this->assertTrue($v->getGreater());
         /** @var WeatherPhenomenon $wp */
-        $wp = $d->getWeatherPhenomenon();
+        $wp = $d->getWeatherPhenomenons();
         $this->assertEquals('-', $wp[0]->getIntensityProximity());
         $this->assertEquals('SH', $wp[0]->getDescriptor());
         $phenomena = $wp[0]->getPhenomena();
@@ -123,7 +123,7 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SM', $v->getVisibility()->getUnit());
         $this->assertTrue($v->getGreater());
         /** @var WeatherPhenomenon $wp */
-        $wp = $d->getWeatherPhenomenon();
+        $wp = $d->getWeatherPhenomenons();
         $this->assertEquals('+', $wp[0]->getIntensityProximity());
         $this->assertEquals('TS', $wp[0]->getDescriptor());
         $phenomena = $wp[0]->getPhenomena();

@@ -37,7 +37,10 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         $found = $result['found'];
         $new_remaining_taf = $result['remaining'];
 
-        $weatherPhenom = array();
+        $result = array(
+            'weatherPhenomenons' => array(),
+        );
+
         for ($i = 1; $i <= 13; $i += 6) {
             if ($found[$i] != null && $found[$i + 3] != '//') {
                 $weather = new WeatherPhenomenon();
@@ -48,12 +51,9 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
                         $weather->addPhenomenon($found[$i + $k]);
                     }
                 }
-                $weatherPhenom[] = $weather;
+                $result['weatherPhenomenons'][] = $weather;
             }
         }
-        $result = array(
-            'weatherPhenomenon' => $weatherPhenom,
-        );
 
         // return result + remaining taf
         return array(

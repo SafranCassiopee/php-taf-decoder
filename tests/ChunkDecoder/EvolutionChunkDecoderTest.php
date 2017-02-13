@@ -71,8 +71,8 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
 
         if ($elements['weather_phenomena']) {
             /** @var array $weatherPhenomena */
-            if(!is_null($decoded_taf->getWeatherPhenomenon())){
-                $proxyWeatherPhenomena = $decoded_taf->getWeatherPhenomenon();
+            if(!is_null($decoded_taf->getWeatherPhenomenons())){
+                $proxyWeatherPhenomena = $decoded_taf->getWeatherPhenomenons();
                 $weatherPhenomena = $proxyWeatherPhenomena[0]->getEvolutions();
                 $entity = $weatherPhenomena[0]->getEntity();
                 $this->assertEquals(
