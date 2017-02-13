@@ -281,7 +281,7 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
     {
         $entity = null;
 
-        if ($entity_name == 'weatherPhenomenon') {
+        if ($entity_name == 'weatherPhenomenons') {
             $entity = new WeatherPhenomenon();
         } else if ($entity_name == 'maxTemperature') {
             $entity =  new Temperature();
