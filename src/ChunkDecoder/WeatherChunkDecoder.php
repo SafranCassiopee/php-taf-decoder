@@ -19,7 +19,7 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         'SA', 'DU', 'HZ', 'FU',
         'VA', 'PY', 'DU', 'PO',
         'SQ', 'FC', 'DS', 'SS',
-        '//',
+        '//', "NSW"
     );
 
     public function getRegexp()
@@ -48,6 +48,7 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
                     if ($found[$i + $k] != null) {
                         $weatherPhenom->addPhenomenon($found[$i + $k]);
                     }
+
                 }
                 $phenomenons[] = $weatherPhenom;
             }
