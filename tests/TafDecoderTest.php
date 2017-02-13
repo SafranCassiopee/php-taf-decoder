@@ -61,11 +61,70 @@ class TafDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($v->getGreater());
         /** @var WeatherPhenomenon $wp */
         $wp = $d->getWeatherPhenomenon();
-        $this->assertEquals('-', $wp->getIntensityProximity());
-        $this->assertEquals('SH', $wp->getDescriptor());
-        $phenomena = $wp->getPhenomena();
+        $this->assertEquals('-', $wp[0]->getIntensityProximity());
+        $this->assertEquals('SH', $wp[0]->getDescriptor());
+        $phenomena = $wp[0]->getPhenomena();
         $this->assertEquals('DZ', $phenomena[0]);
         $this->assertEquals('RA', $phenomena[1]);
+        $cls = $d->getClouds();
+        /** @var CloudLayer $cl */
+        $cl = $cls[0];
+        $this->assertEquals('BKN', $cl->getAmount());
+        $this->assertEquals(2000, $cl->getBaseHeight()->getValue());
+        $this->assertEquals('ft', $cl->getBaseHeight()->getUnit());
+        $this->assertEquals('CB', $cl->getType());
+        /** @var Temperature $mint */
+        $mint = $d->getMinTemperature();
+        $this->assertEquals(-3, $mint->getTemperature()->getValue());
+        $this->assertEquals('deg C', $mint->getTemperature()->getUnit());
+        $this->assertEquals(4, $mint->getDay());
+        $this->assertEquals(5, $mint->getHour());
+        /** @var Temperature $maxt */
+        $maxt = $d->getMaxTemperature();
+        $this->assertEquals(5, $maxt->getTemperature()->getValue());
+        $this->assertEquals('deg C', $maxt->getTemperature()->getUnit());
+        $this->assertEquals(3, $maxt->getDay());
+        $this->assertEquals(18, $maxt->getHour());
+
+    }
+
+    /**
+     * Test parsing of a valid TAF
+     */
+    public function testParseSecond()
+    {
+        $raw_taf = "TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM BKN020CB TX05/0318Z TNM03/0405Z";
+        $d       = $this->decoder->parseStrict($raw_taf);
+
+        $this->assertTrue($d->isValid());
+        $this->assertEquals("TAF TAF LIRU 032244Z 0318/0406 23010KT P6SM BKN020CB TX05/0318Z TNM03/0405Z", $d->getRawTaf());
+        $this->assertEquals('TAF', $d->getType());
+        $this->assertEquals('LIRU', $d->getIcao());
+        $this->assertEquals(3, $d->getDay());
+        $this->assertEquals('22:44 UTC', $d->getTime());
+        /** @var ForecastPeriod $fp */
+        $fp = $d->getForecastPeriod();
+        $this->assertEquals(3, $fp->getFromDay());
+        $this->assertEquals(18, $fp->getFromHour());
+        $this->assertEquals(4, $fp->getToDay());
+        $this->assertEquals(6, $fp->getToHour());
+        /** @var SurfaceWind $sw */
+        $sw = $d->getSurfaceWind();
+        $this->assertFalse($sw->withVariableDirection());
+        $this->assertEquals(230, $sw->getMeanDirection()->getValue());
+        $this->assertEquals('deg', $sw->getMeanDirection()->getUnit());
+        $this->assertNull($sw->getDirectionVariations());
+        $this->assertEquals(10, $sw->getMeanSpeed()->getValue());
+        $this->assertEquals('kt', $sw->getMeanSpeed()->getUnit());
+        $this->assertNull($sw->getSpeedVariations());
+        /** @var Visibility $v */
+        $v = $d->getVisibility();
+        $this->assertEquals(6, $v->getVisibility()->getValue());
+        $this->assertEquals('SM', $v->getVisibility()->getUnit());
+        $this->assertTrue($v->getGreater());
+        /** @var WeatherPhenomenon $wp */
+        $wp = $d->getWeatherPhenomenon();
+        $this->assertEquals(null, $wp);
         $cls = $d->getClouds();
         /** @var CloudLayer $cl */
         $cl = $cls[0];

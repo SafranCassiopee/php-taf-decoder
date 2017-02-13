@@ -211,8 +211,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
             $periodArr = explode('/', $period);
             $embeddedEvolution->setFromDay(intval(mb_substr($periodArr[0], 0, 2)));
             $embeddedEvolution->setFromTime(mb_substr($periodArr[0], 2, 2) . ':00 UTC');
-            $embeddedEvolution->setToDay(intval(mb_substr($periodArr[1], 0, 2)));
-            $embeddedEvolution->setToTime(mb_substr($periodArr[1], 2, 2) . ':00 UTC');
+            if(isset($periodArr[1])){
+                $embeddedEvolution->setToDay(intval(mb_substr($periodArr[1], 0, 2)));
+                $embeddedEvolution->setToTime(mb_substr($periodArr[1], 2, 2) . ':00 UTC');
+            }
 
             $evolution->addEvolution($embeddedEvolution);
             // recurse on the remaining chunk to extract the weather elements it contains

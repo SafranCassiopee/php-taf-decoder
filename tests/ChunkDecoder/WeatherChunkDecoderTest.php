@@ -17,20 +17,22 @@ class WeatherChunkDecoderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test parsing of valid weather chunks
      * @param $chunk
-     * @param $weather_intens
-     * @param $weather_desc
-     * @param $weather_phenom
+     * @param $test_weather_phenoms
      * @param $remaining
      * @dataProvider getChunk
      */
-    public function testParse($chunk, $weather_intens, $weather_desc, $weather_phenom, $remaining)
+    public function testParse($chunk, $test_weather_phenoms, $remaining)
     {
+        $i = 0;
         $decoded = $this->decoder->parse($chunk);
         /** @var WeatherPhenomenon $weather */
-        $weather = $decoded['result']['weatherPhenomenon'];
-        $this->assertEquals($weather_intens, $weather->getIntensityProximity());
-        $this->assertEquals($weather_desc, $weather->getDescriptor());
-        $this->assertEquals($weather_phenom, $weather->getPhenomena());
+        $weatherArray = $decoded['result']['weatherPhenomenon'];
+        foreach ($weatherArray as $weather) {
+            $this->assertEquals($test_weather_phenoms[$i]['weather_intens'], $weather->getIntensityProximity());
+            $this->assertEquals($test_weather_phenoms[$i]['weather_desc'], $weather->getDescriptor());
+            $this->assertEquals($test_weather_phenoms[$i]['weather_phenom'], $weather->getPhenomena());
+            $i++;
+        }
         $this->assertEquals($remaining, $decoded['remaining_taf']);
     }
 
@@ -38,31 +40,91 @@ class WeatherChunkDecoderTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                "chunk"             => "VCBLSN AAA",
-                "weather_intens"    => "VC",
-                "weather_desc"      => "BL",
-                "weather_phenom"    => array("SN"),
-                "remaining"         => "AAA",
+                "chunk" => "VCBLSN AAA",
+                array(
+                    array(
+                        "weather_intens" => "VC",
+                        "weather_desc" => "BL",
+                        "weather_phenom" => array("SN")
+                    )
+                ),
+                "remaining" => "AAA",
             ),
             array(
-                "chunk"             => "-PL BBB",
-                "weather_intens"    => "-",
+                "chunk" => "-PL BBB",
+                array(
+                    array(
+                        "weather_intens" => "-",
+                        "weather_desc" => "",
+                        "weather_phenom" => array("PL")
+                    )
+                ),
+                "remaining" => "BBB",
+            ),
+            array(
+                "chunk" => "+TSRA CCC",
+                array(
+                    array(
+                        "weather_intens" => "+",
+                        "weather_desc" => "TS",
+                        "weather_phenom" => array("RA")
+                    )
+                ),
+                "remaining" => "CCC",
+            ),
+            array(
+                "chunk" => "TSRABR DDD",
+                array(
+                    array(
+                        "weather_intens" => "",
+                        "weather_desc" => "TS",
+                        "weather_phenom" => array("RA", "BR")
+                    )
+                ),
+                "remaining" => "DDD",
+            ),
+            array(
+                "chunk" => "-DZ FG DDD",
+                array(
+                    array(
+                        "weather_intens" => "-",
+                        "weather_desc" => "",
+                        "weather_phenom" => array("DZ")
+                    ),
+                    array(
+                        "weather_intens" => "",
+                        "weather_desc" => "",
+                        "weather_phenom" => array("FG")
+                    )
+                ),
+                "remaining" => "DDD",
+            ),
+            array(
+                "chunk"             => "-SN BR DDD",
+                "weather_inten"     => "-",
                 "weather_desc"      => "",
-                "weather_phenom"    => array("PL"),
-                "remaining"         => "BBB",
+                "weather_phenom"    => array("SN","BR"),
+                "remaining"         => "DDD",
             ),
             array(
-                "chunk"             => "+TSRA CCC",
-                "weather_intens"    => "+",
-                "weather_desc"      => "TS",
-                "weather_phenom"    => array("RA"),
-                "remaining"         => "CCC",
-            ),
-            array(
-                "chunk"             => "TSRABR DDD",
-                "weather_inten"     => "",
-                "weather_desc"      => "TS",
+                "chunk"             => "-RA BR DDD",
+                "weather_inten"     => "-",
+                "weather_desc"      => "",
                 "weather_phenom"    => array("RA","BR"),
+                "remaining"         => "DDD",
+            ),
+            array(
+                "chunk"             => "NSW DDD",
+                "weather_inten"     => "",
+                "weather_desc"      => "",
+                "weather_phenom"    => array("NSW"),
+                "remaining"         => "DDD",
+            ),
+            array(
+                "chunk"             => "-DZ FG DDD",
+                "weather_inten"     => "-",
+                "weather_desc"      => "",
+                "weather_phenom"    => array("DZ", "FG"),
                 "remaining"         => "DDD",
             ),
         );
