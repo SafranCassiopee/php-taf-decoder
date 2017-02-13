@@ -78,8 +78,8 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
                     $elements['weather_intensity'],
                     $entity[0]->getIntensityProximity()
                 );
-                $this->assertEquals($elements['weather_desc'], $weatherPhenomena[0]->getEntity()[0]->getDescriptor());
-                $this->assertEquals($elements['weather_phenomena'], $weatherPhenomena[0]->getEntity()[0]->getPhenomena());
+                $this->assertEquals($elements['weather_desc'], $entity[0]->getDescriptor());
+                $this->assertEquals($elements['weather_phenomena'], $entity[0]->getPhenomena());
             }
         }
 
