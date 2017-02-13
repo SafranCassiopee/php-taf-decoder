@@ -26,9 +26,9 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
     {
         $desc_regexp = implode(self::$desc_dic, '|');
         $phenom_regexp = implode(self::$phenom_dic, '|');
-        $pw_regexp = "([-+]|VC)?($desc_regexp)?($phenom_regexp)?($desc_regexp)?($phenom_regexp)?";
+        $pw_regexp = "([-+]|VC)?($desc_regexp)?($phenom_regexp)?($phenom_regexp)?($phenom_regexp)?";
 
-        return "#^($pw_regexp )?()?#";
+        return "#^($pw_regexp )?($pw_regexp )?($pw_regexp )?()?#";
     }
 
     public function parse($remaining_taf, $cavok = false)
@@ -37,19 +37,24 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         $found = $result['found'];
         $new_remaining_taf = $result['remaining'];
 
-        $weatherPhenom = null;
-        if (trim($found[1]) != null && $found[4] != '//') {
-            $weatherPhenom = new WeatherPhenomenon();
-            $weatherPhenom->setIntensityProximity($found[2]);
-            $weatherPhenom->setDescriptor($found[3]);
-            for ($k = 3; $k <= 5; $k++) {
-                if ($found[1+$k] != null) {
-                    $weatherPhenom->addPhenomenon($found[1+$k]);
+        $phenomenons = null;
+
+        for ($i = 1; $i <= 13; $i += 6) {
+            if ($found[$i] != null && $found[$i + 3] != '//') {
+                $weatherPhenom = new WeatherPhenomenon();
+                $weatherPhenom->setIntensityProximity($found[$i + 1]);
+                $weatherPhenom->setDescriptor($found[$i + 2]);
+                for ($k = 3; $k <= 5; ++$k) {
+                    if ($found[$i + $k] != null) {
+                        $weatherPhenom->addPhenomenon($found[$i + $k]);
+                    }
                 }
+                $phenomenons[] = $weatherPhenom;
             }
         }
+
         $result = array(
-            'weatherPhenomenon' => $weatherPhenom,
+            'weatherPhenomenon' => $phenomenons,
         );
 
         // return result + remaining taf
