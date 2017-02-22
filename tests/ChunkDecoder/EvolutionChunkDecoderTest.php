@@ -71,13 +71,17 @@ class EvolutionChunkDecoderTest extends \PHPUnit_Framework_TestCase
 
         if ($elements['weather_phenomena']) {
             /** @var array $weatherPhenomena */
-            $weatherPhenomena = $decoded_taf->getWeatherPhenomenon()->getEvolutions();
-            $this->assertEquals(
-                $elements['weather_intensity'],
-                $weatherPhenomena[0]->getEntity()->getIntensityProximity()
-            );
-            $this->assertEquals($elements['weather_desc'], $weatherPhenomena[0]->getEntity()->getDescriptor());
-            $this->assertEquals($elements['weather_phenomena'], $weatherPhenomena[0]->getEntity()->getPhenomena());
+            if(!is_null($decoded_taf->getWeatherPhenomenons())){
+                $proxyWeatherPhenomena = $decoded_taf->getWeatherPhenomenons();
+                $weatherPhenomena = $proxyWeatherPhenomena[0]->getEvolutions();
+                $entity = $weatherPhenomena[0]->getEntity();
+                $this->assertEquals(
+                    $elements['weather_intensity'],
+                    $entity[0]->getIntensityProximity()
+                );
+                $this->assertEquals($elements['weather_desc'], $entity[0]->getDescriptor());
+                $this->assertEquals($elements['weather_phenomena'], $entity[0]->getPhenomena());
+            }
         }
 
         /** @var array $clouds */

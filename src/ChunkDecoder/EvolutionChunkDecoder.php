@@ -51,16 +51,16 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
 
     public function getRegexp()
     {
-        $type   = '(BECMG\s+|TEMPO\s+|FM|PROB[034]{2}\s+){1}';
+        $type = '(BECMG\s+|TEMPO\s+|FM|PROB[034]{2}\s+){1}';
         $period = '([0-9]{4}/[0-9]{4}\s+|[0-9]{6}\s+){1}';
-        $rest   = '(.*)';
+        $rest = '(.*)';
 
         return "#$type$period$rest#";
     }
 
     /**
-     * @param string        $remaining_taf
-     * @param DecodedTaf    $decoded_taf
+     * @param string $remaining_taf
+     * @param DecodedTaf $decoded_taf
      * @return string
      */
     public function parse($remaining_taf, $decoded_taf)
@@ -74,6 +74,7 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         if ($found == null) {
             // the first chunk didn't match anything, so we remove it to avoid an infinite loop
             $this->remaining = preg_replace('#(\S+\s+)(.*)#', '', $remaining_taf);
+
             return;
         }
 
@@ -88,12 +89,12 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         if ($evo_type == 'BECMG' || $evo_type == 'TEMPO') {
             $periodArr = explode('/', $evo_period);
             $evolution->setFromDay(intval(mb_substr($periodArr[0], 0, 2)));
-            $evolution->setFromTime(mb_substr($periodArr[0], 2, 2) . ':00 UTC');
+            $evolution->setFromTime(mb_substr($periodArr[0], 2, 2).':00 UTC');
             $evolution->setToDay(intval(mb_substr($periodArr[1], 0, 2)));
-            $evolution->setToTime(mb_substr($periodArr[1], 2, 2) . ':00 UTC');
+            $evolution->setToTime(mb_substr($periodArr[1], 2, 2).':00 UTC');
         } else {
             $evolution->setFromDay(intval(mb_substr($evo_period, 0, 2)));
-            $evolution->setFromTime(mb_substr($evo_period, 2, 2) . ':' . mb_substr($evo_period, 4, 2) . ' UTC');
+            $evolution->setFromTime(mb_substr($evo_period, 2, 2).':'.mb_substr($evo_period, 4, 2).' UTC');
         }
 
         // rest
@@ -105,9 +106,9 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
     /**
      * Extract the weather elements (surface winds, visibility, etc) between 2 evolution tags (BECMG, TEMPO or FM)
      *
-     * @param Evolution     $evolution
-     * @param string        $chunk
-     * @param DecodedTaf    $decoded_taf
+     * @param Evolution $evolution
+     * @param string $chunk
+     * @param DecodedTaf $decoded_taf
      * @throws ChunkDecoderException
      * @return string
      */
@@ -143,10 +144,12 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
                 $entity = $result[$entity_name];
                 if ($entity == null && $entity_name != 'visibility') {
                     // visibility will be null if cavok is true but we still want to add the evolution
-                    throw new ChunkDecoderException($chunk,
+                    throw new ChunkDecoderException(
+                        $chunk,
                         $remaining_evo,
                         'Bad format for weather evolution',
-                        $this);
+                        $this
+                    );
                 }
                 if ($entity_name == 'maxTemperature') {
                     $this->addEvolution($decoded_taf, $evolution, $result, 'maxTemperature');
@@ -161,10 +164,12 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
             } catch (ChunkDecoderException $e) {
                 if (++$tries == count($this->decoder_chain)) {
                     if ($this->strict) {
-                        throw new ChunkDecoderException($chunk,
+                        throw new ChunkDecoderException(
+                            $chunk,
                             $remaining_evo,
                             'Bad format for evolution information',
-                            $this);
+                            $this
+                        );
                     } else {
                         // we tried all the chunk decoders on the first chunk and none of them got a match,
                         // so we drop it
@@ -180,9 +185,9 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
     /**
      * Look recursively for probability (PROBnn) attributes and embed a new evolution object one level deeper for each
      *
-     * @param Evolution     $evolution
-     * @param string        $chunk
-     * @param DecodedTaf    $decoded_taf
+     * @param Evolution $evolution
+     * @param string $chunk
+     * @param DecodedTaf $decoded_taf
      * @return string
      */
     private function probabilityChunkDecoder($evolution, $chunk, $decoded_taf)
@@ -195,10 +200,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
             return $chunk;
         }
 
-        $prob       = trim($found[1]);
-        $type       = trim($found[2]);
-        $period     = trim($found[3]);
-        $remaining  = trim($found[4]);
+        $prob = trim($found[1]);
+        $type = trim($found[2]);
+        $period = trim($found[3]);
+        $remaining = trim($found[4]);
 
         if (strpos($prob, 'PROB') !== false) {
             $evolution->setProbability($prob);
@@ -210,9 +215,9 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
             }
             $periodArr = explode('/', $period);
             $embeddedEvolution->setFromDay(intval(mb_substr($periodArr[0], 0, 2)));
-            $embeddedEvolution->setFromTime(mb_substr($periodArr[0], 2, 2) . ':00 UTC');
+            $embeddedEvolution->setFromTime(mb_substr($periodArr[0], 2, 2).':00 UTC');
             $embeddedEvolution->setToDay(intval(mb_substr($periodArr[1], 0, 2)));
-            $embeddedEvolution->setToTime(mb_substr($periodArr[1], 2, 2) . ':00 UTC');
+            $embeddedEvolution->setToTime(mb_substr($periodArr[1], 2, 2).':00 UTC');
 
             $evolution->addEvolution($embeddedEvolution);
             // recurse on the remaining chunk to extract the weather elements it contains
@@ -225,10 +230,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
     /**
      * Add the evolution to the decodedTaf's entity
      *
-     * @param DecodedTaf    $decoded_taf
-     * @param Evolution     $evolution
-     * @param array         $result
-     * @param string        $entity_name
+     * @param DecodedTaf $decoded_taf
+     * @param Evolution $evolution
+     * @param array $result
+     * @param string $entity_name
      */
     private function addEvolution($decoded_taf, $evolution, $result, $entity_name)
     {
@@ -245,10 +250,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         }
 
         // get the original entity from the decoded taf or a new one decoded taf doesn't contain it yet
-        $getter_name    = 'get' . ucfirst($entity_name);
-        $setter_name    = 'set' . ucfirst($entity_name);
+        $getter_name = 'get'.ucfirst($entity_name);
+        $setter_name = 'set'.ucfirst($entity_name);
         $decoded_entity = $decoded_taf->$getter_name();
-        if ($decoded_entity == null || $entity_name == 'clouds') {
+        if ($decoded_entity == null || $entity_name == 'clouds' || $entity_name == 'weatherPhenomenons') {
             // that entity is not in the decoded_taf yet, or it's a cloud layer which is a special case
             $decoded_entity = $this->instantiateEntity($entity_name);
         }
@@ -259,6 +264,8 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         // update the decoded taf's entity or add the new one to it
         if ($entity_name == 'clouds') {
             $decoded_taf->addCloud($decoded_entity);
+        } elseif ($entity_name == 'weatherPhenomenons') {
+            $decoded_taf->addWeatherPhenomenon($decoded_entity);
         } else {
             $decoded_taf->$setter_name($decoded_entity);
         }
@@ -274,7 +281,7 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
     {
         $entity = null;
 
-        if ($entity_name == 'weatherPhenomenon') {
+        if ($entity_name == 'weatherPhenomenons') {
             $entity = new WeatherPhenomenon();
         } else if ($entity_name == 'maxTemperature') {
             $entity =  new Temperature();

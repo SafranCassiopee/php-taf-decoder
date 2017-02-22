@@ -33,7 +33,7 @@ class DecodedTaf
     private $cavok;
 
     // weather phenomenon
-    private $weather_phenomenon;
+    private $weather_phenomenons;
 
     // cloud layers information
     private $clouds;
@@ -49,6 +49,7 @@ class DecodedTaf
         $this->cavok = false;
         $this->decoding_exceptions = array();
         $this->clouds = array();
+        $this->weather_phenomenons = array();
     }
 
     /**
@@ -185,16 +186,23 @@ class DecodedTaf
         return $this->cavok;
     }
 
-    public function setWeatherPhenomenon($weather_phenomenon)
+    public function setWeatherPhenomenons(array $weather_phenomenons)
     {
-        $this->weather_phenomenon = $weather_phenomenon;
+        $this->weather_phenomenons = $weather_phenomenons;
 
         return $this;
     }
 
-    public function getWeatherPhenomenon()
+    public function addWeatherPhenomenon($weather_phenomenon)
     {
-        return $this->weather_phenomenon;
+        $this->weather_phenomenons[] = $weather_phenomenon;
+
+        return $this;
+    }
+
+    public function getWeatherPhenomenons()
+    {
+        return $this->weather_phenomenons;
     }
 
     public function setClouds(array $clouds)
