@@ -24,8 +24,8 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
 
     public function getRegexp()
     {
-        $desc_regexp = implode(self::$desc_dic, '|');
-        $phenom_regexp = implode(self::$phenom_dic, '|');
+        $desc_regexp = implode('|', self::$desc_dic);
+        $phenom_regexp = implode('|', self::$phenom_dic);
         $pw_regexp = "([-+]|VC)?($desc_regexp)?($phenom_regexp)?($phenom_regexp)?($phenom_regexp)?";
 
         return "#^($pw_regexp )?($pw_regexp )?($pw_regexp )?()?#";
