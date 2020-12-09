@@ -67,9 +67,6 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
     {
         $result = $this->consume($remaining_taf);
         $found = $result['found'];
-        $evo_type = trim($found[1]);
-        $evo_period = trim($found[2]);
-        $remaining = $found[3];
 
         if ($found == null) {
             // the first chunk didn't match anything, so we remove it to avoid an infinite loop
@@ -77,6 +74,10 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
 
             return;
         }
+
+        $evo_type = trim($found[1]);
+        $evo_period = trim($found[2]);
+        $remaining = $found[3];
 
         $evolution = new Evolution();
         $evolution->setType($evo_type);
