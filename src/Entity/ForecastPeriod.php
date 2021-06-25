@@ -24,8 +24,8 @@ class ForecastPeriod
     {
         // check that attribute aren't null
         if (
-            $this->getFromDay() == null || $this->getFromHour() == null ||
-            $this->getToDay() == null || $this->getToHour() == null
+            $this->getFromDay() == null || $this->getFromHour() === null ||
+            $this->getToDay() == null || $this->getToHour() === null
         ) {
             return false;
         }
