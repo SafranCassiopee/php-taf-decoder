@@ -8,8 +8,6 @@ PHP TAF decoder
 
 A PHP library to decode TAF (Terminal Aerodrome Forecast) strings, fully unit tested (100% code coverage) 
 
-Try it on the [demo website](https://php-taf-decoder.cassiopee.aero)
-
 They use php-taf-decoder in production:
 
 - [Safran Cassiopée](http://www.cassiopee.aero/) (private)
